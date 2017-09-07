@@ -1,0 +1,33 @@
+{% extends 'QS/base.html' %}
+{% load staticfiles %}
+<html>
+    <body>
+        <div class="page-header">
+            <h1><a href="">ItemList</a></h1>
+        </div>
+<div class="content container">
+    <div class="row">
+        <div class="col-md-8">
+            {% block content %}
+            <table class="table">
+                <thead class="thead-inverse">
+                <tr>
+                    <th>품번</th>
+                    <th>품명</th>
+                    <th>비고</th>
+                </tr>
+                </thead>
+                {% for item in items %}        
+                <tr>    
+                    <td>{{ item.ItemNo }}</td>
+                    <td>{{ item.ItemName }}</td>
+                    <td>{{ item.Remark|linebreaksbr }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% endblock %}        
+        </div>
+    </div>
+</div>
+    </body>
+</html>

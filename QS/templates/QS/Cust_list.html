@@ -1,0 +1,33 @@
+{% extends 'QS/base.html' %}
+{% load staticfiles %}
+<html>
+    <body>
+        <div class="page-header">
+            <h1><a href="">CustList</a></h1>
+        </div>
+<div class="content container">
+    <div class="row">
+        <div class="col-md-8">
+            {% block content %}
+            <table class="table">
+                <thead class="thead-inverse">
+                <tr>
+                    <th>거래처번호</th>
+                    <th>거래처명</th>
+                    <th>비고</th>
+                </tr>
+                </thead>
+                {% for cust in custs %}        
+                <tr>    
+                    <td>{{ cust.CustNo }}</td>
+                    <td>{{ cust.CustName }}</td>
+                    <td>{{ cust.Remark|linebreaksbr }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% endblock %}        
+        </div>
+    </div>
+</div>
+    </body>
+</html>
