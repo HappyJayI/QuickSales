@@ -77,21 +77,35 @@ def getChoicecode(choices,name,option = 1):
             else:
                 return x[0]
 
-
-def getNo(self):
+def getNo(self,divname):
     strInOutDate = str(self.InOutDate).replace("-","")
 
     if self.InOutSeq == None:
         if self.InOutNo == "" :
-            #cursor 리턴값 확인...
             with connection.cursor() as cursor:
-                cursor.execute( "SELECT max(InOutNo) as InOutNo FROM tinoutm where InOutDate='%s'"%str(self.InOutDate) )
+                cursor.execute( "SELECT max(InOutNo) as InOutNo FROM tinoutm where InOutDiv = %s and InOutDate='%s'"%(str(getChoicecode(InOutDiv_Code,divname,1)),self.InOutDate))
                 NewNo = cursor.fetchone()    
 
                 if NewNo[0] != None:
-                        self.InOutNo = getChoicecode(InOutDiv_Code,'purchase',2) + strInOutDate + str(int(NewNo[0][-3:]) + 1).rjust(3,'0')
+                        self.InOutNo = getChoicecode(InOutDiv_Code,divname,2) + strInOutDate + str(int(NewNo[0][-3:]) + 1).rjust(3,'0')
                 else:
-                    self.InOutNo = getChoicecode(InOutDiv_Code,'purchase',2) + strInOutDate + '001'                    
+                    self.InOutNo = getChoicecode(InOutDiv_Code,divname,2) + strInOutDate + '001'  
+
+
+def getCollectNo(self):
+    strCollectDate = str(self.CollectDate).replace("-","")
+    
+    if self.CollectSeq == None:
+        if self.CollectNo == "" :
+            with connection.cursor() as cursor:
+                cursor.execute( "SELECT max(CollectNo) as CollectNo FROM tCollectm where CollectDate='%s'"%(self.CollectDate))
+                NewNo = cursor.fetchone()    
+
+                if NewNo[0] != None:
+                        self.CollectNo = strCollectDate + str(int(NewNo[0][-3:]) + 1).rjust(3,'0')
+                else:
+                    self.CollectNo = strCollectDate + '001'                     
+                   
 
 
 class Item(models.Model):    

@@ -1,0 +1,16 @@
+{% extends 'QS/base.html' %}
+
+{% block content %}
+    <div class="post">
+        {% if post.InOutDate %}
+            <div class="date">
+                {{ post.InOutDate }}
+            </div>
+        {% endif %}
+        {% if user.is_authenticated %}
+        <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+        {% endif %}
+        <h1>{{ post.InOutNo }}</h1>
+        <p>{{ post.CustSeq|linebreaksbr }}</p>
+    </div>
+{% endblock %}

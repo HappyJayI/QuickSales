@@ -1,0 +1,11 @@
+{% extends 'QS/base.html' %}
+
+{% block content %}
+{% for post in selected %}
+<div>
+    <p>published: {{ post.InOutDate }}</p>                        
+    <h1><a href="{% url 'post_detail' pk=post.pk %}">{{ post.InOutNo }}</a></h1>
+    <p>{{ post.CustSeq|linebreaksbr }}</p>
+</div>
+{% endfor %}
+{% endblock %}

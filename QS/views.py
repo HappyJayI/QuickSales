@@ -1,5 +1,19 @@
-from django.shortcuts import render
-from .models import Item, Cust
+from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect
+from .models import *
+from .forms import *
+
+def bill_new(request):
+    return render(request,'QS/bill_edit.html',{"bill":bills})    
+    # if request.method == "POST":
+    #     form = BillForm(request.POST)
+    #     if form.is_valid():
+    #         bill = form.save(commit=False)
+    #         bill.save()
+    #         return redirect('bill_detail', pk=bill.pk)
+    # else:
+    #     form = BillForm()
+    # return render(request, 'QS/bill_edit.html', {'form': form})
 
 def Item_list(request):
     items = Item.objects.all()
@@ -8,6 +22,40 @@ def Item_list(request):
 def Cust_list(request):
     custs = Cust.objects.all()
     return render(request,'QS/Cust_list.html',{"custs":custs})
+
+def post_list(request):
+    posts = InvoiceM.objects.all()
+    return render(request, 'QS/post_list.html',{"posts":posts})
+
+def post_detail(request,pk):
+    post = get_object_or_404(InvoiceM, pk=pk)
+    return render(request,'QS/post_detail.html',{'post':post})
+
+
+def post_new(request):
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('post_detail', pk=post.pk)
+    else:
+        form = PostForm()
+    return render(request, 'QS/post_edit.html', {'form': form})
+
+def post_edit(request, pk):
+    post = get_object_or_404(InvoiceM, pk=pk)
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            # post.author = request.user
+            # post.published_date = timezone.now()
+            post.save()
+            return redirect('post_detail', pk=post.pk)
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'QS/post_edit.html', {'form': form})
 
 
 import json

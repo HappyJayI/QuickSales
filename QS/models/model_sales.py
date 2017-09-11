@@ -6,7 +6,7 @@ from .model_common import *
 class InvoiceM(models.Model):    
     InOutSeq = models.AutoField(db_column="InOutSeq",primary_key=True)
     InOutDiv = models.IntegerField(default=getChoicecode(InOutDiv_Code,"invoice"),editable=False, choices=InOutDiv_Choices,verbose_name="입출고구분") #/*11:구매입고,21:거래명세,22:계산서,31:기타출고*/
-    InOutNo = models.CharField(max_length=100,blank=True,null=True,verbose_name="거래명세번호")
+    InOutNo = models.CharField(max_length=100,blank=True,verbose_name="거래명세번호")
     InOutDate = models.DateField(verbose_name="거래명세일")
     InOutName = models.CharField(max_length=100,blank=True,null=True,verbose_name="거래명")
     IsCfm = models.CharField(max_length=1,choices=IsCfm_Choices,blank=True,null=True,verbose_name="확정여부")
@@ -18,6 +18,10 @@ class InvoiceM(models.Model):
 
     def __str__(self):
         return "%s %s" %(self.InOutNo,self.InOutDate)
+
+    def save(self, *args, **kwargs):
+        getNo(self,'invoice')
+        super(InvoiceM, self).save(*args, **kwargs)    
 
     class Meta:
         db_table = "tinoutm"
@@ -51,7 +55,7 @@ class InvoiceD(models.Model):
 class BillM(models.Model):    
     InOutSeq = models.AutoField(db_column="InOutSeq",primary_key=True)
     InOutDiv = models.IntegerField(default=getChoicecode(InOutDiv_Code,"bill"),editable=False, choices=InOutDiv_Choices,verbose_name="입출고구분") #/*11:구매입고,21:거래명세,22:계산서,31:기타출고*/
-    InOutNo = models.CharField(max_length=100,blank=True,null=True,verbose_name="계산서번호")
+    InOutNo = models.CharField(max_length=100,blank=True,verbose_name="계산서번호")
     InOutDate = models.DateField(verbose_name="계산서일")
     InOutName = models.CharField(max_length=100,blank=True,null=True,verbose_name="계산서명")
     IsCfm = models.CharField(max_length=1,choices=IsCfm_Choices,blank=True,null=True,verbose_name="확정여부")
@@ -63,6 +67,10 @@ class BillM(models.Model):
 
     def __str__(self):
         return "%s %s" %(self.InOutNo,self.InOutDate)
+
+    def save(self, *args, **kwargs):
+        getNo(self,'bill')
+        super(BillM, self).save(*args, **kwargs)    
 
     class Meta:
         db_table = "tinoutm"
@@ -97,10 +105,10 @@ class BillD(models.Model):
 class CollectM(models.Model):    
     CollectSeq = models.AutoField(db_column="CollectSeq",primary_key=True)
     CollectDiv = models.IntegerField(default=21,editable=False, choices=CollectDiv_Choices,verbose_name="수금구분") #/*11:구매입고,21:거래명세,22:수금,31:기타출고*/
-    CollectNo = models.CharField(max_length=100,verbose_name="수금번호")
+    CollectNo = models.CharField(max_length=100,blank=True,verbose_name="수금번호")
     CollectDate = models.DateField(verbose_name="수금일")
     CollectName = models.CharField(max_length=100,blank=True,null=True,verbose_name="수금명")
-    IsCfm = models.CharField(max_length=1,choices=IsCfm_Choices,verbose_name="확정여부")
+    IsCfm = models.CharField(max_length=1,choices=IsCfm_Choices,blank=True,verbose_name="확정여부")
     Remark = models.CharField(max_length=100,blank=True,null=True,verbose_name="비고")
     CustSeq = models.ForeignKey(Cust, db_column="CustSeq",verbose_name="거래처")
     EmpSeq = models.IntegerField(blank=True,null=True,verbose_name="사원코드")
@@ -109,6 +117,10 @@ class CollectM(models.Model):
 
     def __str__(self):
         return "%s %s" %(self.CollectNo,self.CollectDate)
+
+    def save(self, *args, **kwargs):
+        getCollectNo(self)
+        super(CollectM, self).save(*args, **kwargs)       
 
     class Meta:
         db_table = "tcollectm"
@@ -123,7 +135,7 @@ class CollectD(models.Model):
     Remark = models.CharField(max_length=100,verbose_name="비고")
     Amt = models.FloatField(blank=True,null=True,verbose_name="외화금액")
     BaseAmt = models.FloatField(blank=True,null=True,verbose_name="금액")
-    OriginInOutDSeq = models.ForeignKey(InOutD,blank=True,null=True,verbose_name="계산서DSeq")
+    InOutDSeq = models.ForeignKey(BillD, db_column="OriginInOutDSeq",blank=True,null=True,verbose_name="계산서DSeq")
 
     def __str__(self):
         return "%s %s" %(self.CollectSeq,self.CollectSubSeq)
@@ -133,3 +145,5 @@ class CollectD(models.Model):
         verbose_name="수금품목"
         verbose_name_plural = "수금품목"  
         unique_together = (("CollectSeq", "CollectSubSeq"),)      
+
+

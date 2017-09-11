@@ -21,21 +21,7 @@ class PurchaseM(models.Model):
         return "%s %s" %(self.InOutNo,self.InOutDate)
 
     def save(self, *args, **kwargs):
-        strInOutDate = str(self.InOutDate).replace("-","")
-
-        # if self.InOutSeq == None:
-        #     if self.InOutNo == "" :
-        #         #cursor 리턴값 확인...
-        #         with connection.cursor() as cursor:
-        #             cursor.execute( "SELECT max(InOutNo) as InOutNo FROM tinoutm where InOutDate='%s'"%str(self.InOutDate) )
-        #             NewNo = cursor.fetchone()    
-
-        #             if NewNo[0] != None:
-        #                  self.InOutNo = getChoicecode(InOutDiv_Code,'purchase',2) + strInOutDate + str(int(NewNo[0][-3:]) + 1).rjust(3,'0')
-        #             else:
-        #                 self.InOutNo = getChoicecode(InOutDiv_Code,'purchase',2) + strInOutDate + '001'                    
-        getNo(self)
-        
+        getNo(self,'purchase')
         super(PurchaseM, self).save(*args, **kwargs)
 
     class Meta:
