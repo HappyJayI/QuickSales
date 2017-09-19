@@ -13,5 +13,5 @@ urlpatterns = [
 
     url(r'^Item/$',views.Item_list,name='Item_list'),
     url(r'^Cust/$',views.Cust_list,name='Cust_list'),
-    url(r'^test/$', TestFormView.as_view(), name="test_form"),
+    url(r'^print/invoice/$',views.print_invoice, name="print_invoice"),
 ]

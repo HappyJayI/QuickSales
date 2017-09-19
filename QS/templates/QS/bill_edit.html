@@ -1,11 +1,20 @@
 {% extends 'QS/base.html' %}
 
 {% block content %}
-{% for post in selected %}
 <div>
-    <p>published: {{ post.InOutDate }}</p>                        
-    <h1><a href="{% url 'post_detail' pk=post.pk %}">{{ post.InOutNo }}</a></h1>
-    <p>{{ post.CustSeq|linebreaksbr }}</p>
-</div>
-{% endfor %}
+        <form method="POST" class="post-form">{% csrf_token %}
+            {{ form.as_p }}
+            <!-- <p>selected : {{ selected }}</p>    
+            <p>form : {{ form }}</p>    
+            <p>ct : {{ ct }}</p>    
+            {% for row in ct %}
+            <p>invoiceno : {{ row.InOutNo }}</p>   
+            <p>invoicedate : {{ row.InOutDate }}</p>       
+            {% endfor %}  -->
+            <button type="submit" class="save btn btn-default">Save</button>
+        </form>
+        
+    
+    </div>
+
 {% endblock %}

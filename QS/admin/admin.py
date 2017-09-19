@@ -23,14 +23,6 @@ def export_as_json(modeladmin, request, queryset):
     serializers.serialize("json", queryset, stream=response)
     return response
 
-def Print_Invoice(modeladmin, request, queryset):
-    #  return render(request, 'QS/invoice_print.html',
-    # {'title': 'Invoice','objects': queryset})
-    selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
-    ct = ContentType.objects.get_for_model(queryset.model)
-    return HttpResponseRedirect("/test/?ct=%s&ids=%s" % (ct.pk, ",".join(selected)))
-
-
 #Admin
 class ItemAdmin(admin.ModelAdmin):
     list_display = ['ItemName','ItemNo','Spec']
@@ -63,7 +55,7 @@ class MCodeAdmin(admin.ModelAdmin):
 class InOutD_Inline(admin.TabularInline):model = InOutD
 @admin.register(InOutM)
 class InOutMAdmin(admin.ModelAdmin):
-    actions = [make_Cfm,Cancel_Cfm,Print_Invoice]
+    actions = [make_Cfm,Cancel_Cfm]
     save_on_top = True
     ordering = ['InOutNo']
     list_filter = ['InOutDate']

@@ -3,8 +3,11 @@ from django.shortcuts import redirect
 from .models import *
 from .forms import *
 
+def print_invoice(request):
+    return render(request,'QS/print_invoice.html')
+
 def bill_new(request):
-    return render(request,'QS/bill_edit.html',{"bill":bills})    
+     return render(request,'QS/bill_edit.html',{"bill":bills})    
     # if request.method == "POST":
     #     form = BillForm(request.POST)
     #     if form.is_valid():
